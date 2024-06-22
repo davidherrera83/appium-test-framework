@@ -1,19 +1,22 @@
 from appium.webdriver.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import TimeoutException
+from models.user import UserModel
 
 
 class Herokuapp:
-    def __init__(self, driver: WebDriver):
+    def __init__(self, driver: WebDriver, user: UserModel):
         """
         Initialize the Herokuapp class with a WebDriver instance.
 
         :param driver: The WebDriver instance used to interact with the browser.
+        :param user: Instance of UserMoel to obtain user information. 
         """
         self.driver = driver
+        self.user = user
 
     def visit_herokuapp(self):
         """
@@ -30,7 +33,7 @@ class Herokuapp:
         :param css_selector: The CSS selector of the element to wait for.
         """
         example_link = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located(
+            ec.presence_of_element_located(
                 (By.CSS_SELECTOR, available_example))
         )
         example_link.click()
@@ -46,7 +49,7 @@ class Herokuapp:
         """
         try:
             WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, css_selector))
+                ec.presence_of_element_located((By.CSS_SELECTOR, css_selector))
             )
 
             return self
@@ -86,3 +89,24 @@ class Herokuapp:
         actions.drag_and_drop(source_element, target_element).perform()
 
         return self
+    
+    def secure_login(self):
+        """
+        Users are able to authenticate via secure login page
+        """
+        self.driver.find_element(By.CSS_SELECTOR, "#username").send_keys(self.user.username)
+        self.driver.find_element(By.CSS_SELECTOR, "#password").send_keys(self.user.password)
+        self.driver.find_element(By.CSS_SELECTOR, 'button[type="submit"]').click()
+
+        return self
+    
+    def login_successful(self):
+        """
+        Searches for successful login message.
+
+        :returns: bool indicating whether the success message is displayed.
+        """
+        success_message = WebDriverWait(self.driver, 10).until(
+            ec.presence_of_element_located((By.CSS_SELECTOR, 'div.flash.success'))
+        )
+        return success_message.is_displayed()
