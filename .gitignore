@@ -164,4 +164,3 @@ cython_debug/
 # Project Files
 .DS_STORE
 users.json
-users.json
