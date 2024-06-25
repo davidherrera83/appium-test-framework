@@ -1,5 +1,4 @@
 from fw import Examples
-from selenium.webdriver.remote.webelement import BaseWebElement
 
 def test_drag_and_drop(herokuapp):
     # Navigate to https://the-internet.herokuapp.com/
@@ -33,7 +32,6 @@ def test_drag_and_drop(herokuapp):
     assert column_b_text == 'A', f"Expected column B to contain 'A' but found '{
         column_b_text}'"
 
-
 def test_secure_login(herokuapp):
     herokuapp.visit_herokuapp()
     herokuapp.click_on_example(Examples.FORM_AUTHENTICATION)
@@ -43,3 +41,10 @@ def test_secure_login(herokuapp):
 
     assert success_message is True
 
+def test_infinite_scroll(herokuapp):
+    herokuapp.visit_herokuapp()
+    herokuapp.click_on_example(Examples.INFINITE_SCROLL)
+    herokuapp.wait_for_element_on_page("#content")
+    successful_scroll = herokuapp.scroll_down_and_verify(5)
+
+    assert successful_scroll, "Infinite scroll did not load more content"

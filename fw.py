@@ -10,9 +10,9 @@ class Examples:
     Available examples coming from http://the-internet.herokuapp.com/. This is expandable by adding more variables as
     they become available. The variables are set with the href link of the Element in test.
     """
-    ADD_REMOVE_ELEMENTS = 'a[href="/add_remove_elements/"]'
     DRAG_AND_DROP = 'a[href="/drag_and_drop"]'
     FORM_AUTHENTICATION = 'a[href="/login"]'
+    INFINITE_SCROLL = 'a[href="/infinite_scroll"]'
 
 def get_user() -> UserModel:
     """
